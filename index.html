@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Protégé par Mot de Passe</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+        }
+        
+        .login-form {
+            margin-top: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .content {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .error-message {
+            color: #f44336;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .logout-btn {
+            background-color: #f44336;
+            margin-top: 20px;
+        }
+        
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="login-section">
+            <h1>Zone Sécurisée</h1>
+            <p>Veuillez entrer le mot de passe pour accéder au contenu.</p>
+            
+            <div class="login-form">
+                <input type="password" id="password" placeholder="Mot de passe">
+                <button id="submit-btn">Accéder</button>
+                <p id="error-message" class="error-message">Mot de passe incorrect. Veuillez réessayer.</p>
+            </div>
+        </div>
+        
+        <div id="content-section" class="content">
+            <h1>Contenu Sécurisé</h1>
+            <p>Bienvenue dans la zone sécurisée de notre site web !</p>
+            <p>Ce contenu n'est visible que pour les personnes autorisées.</p>
+            <p>Vous pouvez maintenant accéder à toutes les informations confidentielles ici.</p>
+            
+            <h2>Informations importantes</h2>
+            <p>Voici quelques informations qui étaient protégées par le mot de passe :</p>
+            <ul>
+                <li>Information confidentielle 1</li>
+                <li>Information confidentielle 2</li>
+                <li>Information confidentielle 3</li>
+            </ul>
+            
+            <button id="logout-btn" class="logout-btn">Se déconnecter</button>
+        </div>
+    </div>
+
+    <script>
+        // Le mot de passe correct (à modifier selon vos besoins)
+        const correctPassword = "secret123";
+        
+        // Éléments du DOM
+        const loginSection = document.getElementById('login-section');
+        const contentSection = document.getElementById('content-section');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorMessage = document.getElementById('error-message');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Vérifier si l'utilisateur est déjà authentifié
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                showContent();
+            }
+        });
+        
+        // Gestionnaire d'événement pour le bouton de soumission
+        submitBtn.addEventListener('click', checkPassword);
+        
+        // Permettre la soumission en appuyant sur Entrée
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+        
+        // Gestionnaire d'événement pour le bouton de déconnexion
+        logoutBtn.addEventListener('click', function() {
+            sessionStorage.removeItem('authenticated');
+            hideContent();
+        });
+        
+        // Fonction pour vérifier le mot de passe
+        function checkPassword() {
+            if (passwordInput.value === correctPassword) {
+                sessionStorage.setItem('authenticated', 'true');
+                showContent();
+                errorMessage.style.display = 'none';
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+            }
+        }
+        
+        // Fonction pour afficher le contenu
+        function showContent() {
+            loginSection.style.display = 'none';
+            contentSection.style.display = 'block';
+        }
+        
+        // Fonction pour cacher le contenu
+        function hideContent() {
+            contentSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
